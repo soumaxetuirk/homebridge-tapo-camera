@@ -68,7 +68,19 @@ export class OnvifCamera {
 
     return this.events;
   }
+public async reinitialize() {
+  this.log.warn("Reinitializing ONVIF connection...");
 
+  // destroy old
+  this.events?.removeAllListeners();
+  this.events = undefined;
+  this.device = undefined;
+
+  // recreate everything fresh
+  await this.getEventEmitter();
+
+  this.log.info("ONVIF fully reinitialized");
+}
   async getDeviceInfo(): Promise<DeviceInformation> {
     const onvifDevice = await this.getDevice();
     return new Promise((resolve, reject) => {
